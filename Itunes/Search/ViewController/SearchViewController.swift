@@ -18,8 +18,14 @@ final class SearchViewController: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<String, Itunes>!
     
     private func layout() -> UICollectionViewLayout {
-        let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-        let layout = UICollectionViewCompositionalLayout.list(using: configuration)
+        let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
+        
+        let containerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(350))
+        let containerGroup = NSCollectionLayoutGroup.vertical(layoutSize: containerSize, subitems: [infoItem])
+        
+        let section = NSCollectionLayoutSection(group: containerGroup)
+        let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
     

@@ -15,6 +15,12 @@ final class ItunesCollectionViewCell: UICollectionViewCell {
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()
     private let downloadButton = UIButton()
+    private let previewStackView = UIStackView()
+    private let previewImage1 = UIImageView()
+    private let previewImage2 = UIImageView()
+    private let previewImage3 = UIImageView()
+    
+    private lazy var previewImages = [previewImage1, previewImage2, previewImage3]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,9 +35,13 @@ final class ItunesCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(iconImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(downloadButton)
+        contentView.addSubview(previewStackView)
+        previewStackView.addArrangedSubview(previewImage1)
+        previewStackView.addArrangedSubview(previewImage2)
+        previewStackView.addArrangedSubview(previewImage3)
         
         iconImageView.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview().inset(10)
+            make.top.equalTo(contentView.safeAreaLayoutGuide).offset(10)
             make.size.equalTo(60)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).offset(10)
         }
@@ -49,17 +59,36 @@ final class ItunesCollectionViewCell: UICollectionViewCell {
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(-10)
         }
         
+        previewStackView.snp.makeConstraints { make in
+            make.top.equalTo(iconImageView.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.height.equalTo(230)
+        }
+        
         iconImageView.backgroundColor = .red
         iconImageView.layer.cornerRadius = 10
         iconImageView.clipsToBounds = true
         
         titleLabel.font = .boldSystemFont(ofSize: 14)
         
-        downloadButton.layer.cornerRadius = 10
-        downloadButton.clipsToBounds = true
-        downloadButton.setTitle("받기", for: .normal)
-        downloadButton.backgroundColor = .lightGray
-        downloadButton.setTitleColor(.systemBlue, for: .normal)
+        downloadButton.configuration = .download
+        downloadButton.configuration?.title = "받기"
+        
+        previewStackView.axis = .horizontal
+        previewStackView.spacing = 10
+        previewStackView.distribution = .fillEqually
+        
+        previewImage1.backgroundColor = .lightGray
+        previewImage1.layer.cornerRadius = 10
+        previewImage1.clipsToBounds = true
+        
+        previewImage2.backgroundColor = .lightGray
+        previewImage2.layer.cornerRadius = 10
+        previewImage2.clipsToBounds = true
+        
+        previewImage3.backgroundColor = .lightGray
+        previewImage3.layer.cornerRadius = 10
+        previewImage3.clipsToBounds = true
     }
     
     func configureData(data: Itunes){
@@ -68,5 +97,13 @@ final class ItunesCollectionViewCell: UICollectionViewCell {
         }
         
         titleLabel.text = data.trackName
+        
+        for (idx, screenshot) in data.screenshotUrls.enumerated() {
+            if idx > 2 { return }
+            
+            if let url = URL(string: screenshot) {
+                previewImages[idx].kf.setImage(with: url)
+            }
+        }
     }
 }

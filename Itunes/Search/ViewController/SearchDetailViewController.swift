@@ -154,12 +154,8 @@ final class SearchDetailViewController: UIViewController {
         collectionView.register(PreviewCollectionViewCell.self, forCellWithReuseIdentifier: PreviewCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         
-        var configuration = UIButton.Configuration.plain()
-        configuration.background.backgroundColor = .systemBlue
-        configuration.baseForegroundColor = .white
-        configuration.cornerStyle = .capsule
-        configuration.title = "열기"
-        downloadButton.configuration = configuration
+        downloadButton.configuration = .download
+        downloadButton.configuration?.title = "열기"
     }
     
     private func bind(){
