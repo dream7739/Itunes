@@ -16,6 +16,7 @@ struct Itunes: Decodable, Hashable {
     let screenshotUrls: [String]
     let artworkUrl60: String
     let artworkUrl100: String
+    let artworkUrl512: String
     let currentVersionReleaseDate: String
     let releaseNotes: String
     let artistName: String
@@ -29,5 +30,5 @@ struct Itunes: Decodable, Hashable {
     let minimumOsVersion: String
     let averageUserRating: Double
     let contentAdvisoryRating: String
-    
+    let version: String
 }

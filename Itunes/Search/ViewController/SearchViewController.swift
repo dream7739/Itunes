@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 
 final class SearchViewController: UIViewController {
-
+    
     private let searchController = UISearchController()
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
@@ -54,11 +54,7 @@ final class SearchViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        collectionView.rx.itemSelected
-            .bind(with: self) { owner, index in
-                print(index)
-            }
-
+        
     }
     
     private func configureView(){
@@ -72,8 +68,10 @@ final class SearchViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        collectionView.delegate = self
     }
-
+    
     private func configureDataSource(){
         var registeration: UICollectionView.CellRegistration<ItunesCollectionViewCell, Itunes>!
         
@@ -95,6 +93,14 @@ final class SearchViewController: UIViewController {
         dataSource.apply(snapshot)
     }
     
-
+    
 }
 
+extension SearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = SearchDetailViewController()
+        detailVC.viewModel.detailData = dataSource.itemIdentifier(for: indexPath)
+        navigationController?.pushViewController(detailVC, animated: true)
+        
+    }
+}

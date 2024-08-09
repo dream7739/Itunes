@@ -16,6 +16,7 @@
 		886F96D42C65E64F00D8CDF3 /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96D32C65E64F00D8CDF3 /* SearchDetailViewController.swift */; };
 		886F96D62C65E65500D8CDF3 /* SearchDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96D52C65E65500D8CDF3 /* SearchDetailViewModel.swift */; };
 		886F96DD2C65E69E00D8CDF3 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96DC2C65E69E00D8CDF3 /* BaseViewModel.swift */; };
+		886F96DF2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96DE2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift */; };
 		88B8EF782C64DD71007E0864 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B8EF772C64DD71007E0864 /* AppDelegate.swift */; };
 		88B8EF7A2C64DD71007E0864 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B8EF792C64DD71007E0864 /* SceneDelegate.swift */; };
 		88B8EF7C2C64DD71007E0864 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B8EF7B2C64DD71007E0864 /* SearchViewController.swift */; };
@@ -37,6 +38,7 @@
 		886F96D32C65E64F00D8CDF3 /* SearchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		886F96D52C65E65500D8CDF3 /* SearchDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailViewModel.swift; sourceTree = "<group>"; };
 		886F96DC2C65E69E00D8CDF3 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		886F96DE2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		88B8EF742C64DD71007E0864 /* Itunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Itunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88B8EF772C64DD71007E0864 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88B8EF792C64DD71007E0864 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				886F96C42C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift */,
+				886F96DE2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				88B8EF902C64DF42007E0864 /* APIKey.swift in Sources */,
 				886F96D42C65E64F00D8CDF3 /* SearchDetailViewController.swift in Sources */,
 				886F96D22C65D97100D8CDF3 /* SearchViewModel.swift in Sources */,
+				886F96DF2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift in Sources */,
 				88B8EF7A2C64DD71007E0864 /* SceneDelegate.swift in Sources */,
 				886F96C72C65CAB700D8CDF3 /* Itunes.swift in Sources */,
 			);
