@@ -30,6 +30,7 @@
 		88B8EF982C64E0E1007E0864 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 88B8EF972C64E0E1007E0864 /* SnapKit */; };
 		88DB25932C66F518009CA375 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DB25922C66F518009CA375 /* UserDefaultsManager.swift */; };
 		88DB25952C66F889009CA375 /* RecentSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DB25942C66F889009CA375 /* RecentSearchCollectionViewCell.swift */; };
+		88DB25972C66FF3A009CA375 /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DB25962C66FF3A009CA375 /* ReusableProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		88B8EF8F2C64DF42007E0864 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		88DB25922C66F518009CA375 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		88DB25942C66F889009CA375 /* RecentSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		88DB25962C66FF3A009CA375 /* ReusableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				886F96DC2C65E69E00D8CDF3 /* BaseViewModel.swift */,
+				88DB25962C66FF3A009CA375 /* ReusableProtocol.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				88B8EF902C64DF42007E0864 /* APIKey.swift in Sources */,
 				886F96D42C65E64F00D8CDF3 /* SearchDetailViewController.swift in Sources */,
 				886F96D22C65D97100D8CDF3 /* SearchViewModel.swift in Sources */,
+				88DB25972C66FF3A009CA375 /* ReusableProtocol.swift in Sources */,
 				886F96DF2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift in Sources */,
 				88DB25932C66F518009CA375 /* UserDefaultsManager.swift in Sources */,
 				883C30D12C66557000AB2A77 /* UIButton.Configuration+.swift in Sources */,

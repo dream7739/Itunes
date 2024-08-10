@@ -15,17 +15,33 @@ final class SearchViewController: UIViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     
-    private var dataSource: UICollectionViewDiffableDataSource<String, Itunes>!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     
     private func layout() -> UICollectionViewLayout {
-        let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-        let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
+        let layout = UICollectionViewCompositionalLayout { section, env in
+            switch Section.allCases[section] {
+            case .keyword:
+                let keywordItemSize = NSCollectionLayoutSize(widthDimension: .estimated(50), heightDimension:  .fractionalHeight(1))
+                let keywordItem = NSCollectionLayoutItem(layoutSize: keywordItemSize)
+                let containerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
+                let containerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: containerSize, subitems: [keywordItem])
+                containerGroup.interItemSpacing = .fixed(4)
+                let section = NSCollectionLayoutSection(group: containerGroup)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+                section.orthogonalScrollingBehavior = .continuous
+                return section
+            case .main:
+                let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
+                
+                let containerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(350))
+                let containerGroup = NSCollectionLayoutGroup.vertical(layoutSize: containerSize, subitems: [infoItem])
+                
+                let section = NSCollectionLayoutSection(group: containerGroup)
+                return section
+            }
+        }
         
-        let containerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(350))
-        let containerGroup = NSCollectionLayoutGroup.vertical(layoutSize: containerSize, subitems: [infoItem])
-        
-        let section = NSCollectionLayoutSection(group: containerGroup)
-        let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
     
@@ -36,8 +52,9 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        bind()
         configureDataSource()
+        applyInitialSnapshot()
+        bind()
     }
     
     private func bind(){
@@ -49,6 +66,7 @@ final class SearchViewController: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.resultList
+            .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
                 owner.updateSnapshot(data: value)
             } onError: { owner, error in
@@ -68,6 +86,7 @@ final class SearchViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "검색"
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         
         view.addSubview(collectionView)
         
@@ -79,34 +98,64 @@ final class SearchViewController: UIViewController {
     }
     
     private func configureDataSource(){
-        var registeration: UICollectionView.CellRegistration<ItunesCollectionViewCell, Itunes>!
+        let keywordRegisteration = UICollectionView.CellRegistration<RecentSearchCollectionViewCell, String> { cell, indexPath, itemIdentifier in
+            cell.configureData(data: itemIdentifier)
+        }
         
-        registeration = UICollectionView.CellRegistration(handler: { cell, indexPath, itemIdentifier in
-        })
+        let mainRegisteration = UICollectionView.CellRegistration<ItunesCollectionViewCell, Itunes> { cell, indexPath, itemIdentifier in
+            cell.configureData(data: itemIdentifier)
+        }
         
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-            let cell = collectionView.dequeueConfiguredReusableCell(using: registeration, for: indexPath, item: itemIdentifier)
-            cell.configureData(data: itemIdentifier)
-            return cell
+            switch Section.allCases[indexPath.section] {
+            case .keyword:
+                guard let item = itemIdentifier as? String else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueConfiguredReusableCell(using: keywordRegisteration, for: indexPath, item: item)
+                return cell
+            case .main:
+                guard let item = itemIdentifier as? Itunes else { return UICollectionViewCell() }
+                let cell = collectionView.dequeueConfiguredReusableCell(using: mainRegisteration, for: indexPath, item: item)
+                return cell
+            }
         })
+        
+    }
+    
+    private func applyInitialSnapshot(){
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections([.keyword, .main])
+        snapshot.appendItems(["안녕", "하세", "요"], toSection: .keyword)
+        dataSource.apply(snapshot)
         
     }
     
     private func updateSnapshot(data: [Itunes]){
-        var snapshot = NSDiffableDataSourceSnapshot<String, Itunes>()
-        snapshot.appendSections(["main"])
-        snapshot.appendItems(data)
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .main))
+        snapshot.appendItems(data, toSection: .main)
         dataSource.apply(snapshot)
     }
+}
+
+extension SearchViewController {
+    enum Section: CaseIterable {
+        case keyword
+        case main
+    }
     
-    
+    typealias Item = AnyHashable
 }
 
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let detailVC = SearchDetailViewController()
-        detailVC.viewModel.detailData = dataSource.itemIdentifier(for: indexPath)
-        navigationController?.pushViewController(detailVC, animated: true)
+        let section = dataSource.sectionIdentifier(for: indexPath.section)
         
+        if section == .main {
+            if let data = dataSource.itemIdentifier(for: indexPath) as? Itunes {
+                let detailVC = SearchDetailViewController()
+                detailVC.viewModel.detailData = data
+                navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }
     }
 }

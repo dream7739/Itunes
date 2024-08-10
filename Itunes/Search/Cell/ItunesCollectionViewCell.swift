@@ -10,7 +10,6 @@ import SnapKit
 import Kingfisher
 
 final class ItunesCollectionViewCell: UICollectionViewCell {
-    static let identifier = "ItunesCollectionViewCell"
     
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()

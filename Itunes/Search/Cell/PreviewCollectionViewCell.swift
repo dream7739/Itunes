@@ -10,7 +10,6 @@ import Kingfisher
 import SnapKit
 
 final class PreviewCollectionViewCell: UICollectionViewCell {
-    static let identifier = "PreviewCollectionViewCell"
     
     private let previewImageView = UIImageView()
  

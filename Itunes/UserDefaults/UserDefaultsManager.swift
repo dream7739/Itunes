@@ -26,6 +26,6 @@ struct UserDefault<T> {
 final class UserDefaultsManager {
     private init() { }
     
-    @UserDefault(key: "searchList", defaultValue: [])
-    static var searchList: [String]
+    @UserDefault(key: "searchList", defaultValue: [:])
+    static var searchList: [Int: String]
 }
