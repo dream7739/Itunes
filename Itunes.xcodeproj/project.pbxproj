@@ -28,6 +28,8 @@
 		88B8EF932C64E0D9007E0864 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 88B8EF922C64E0D9007E0864 /* RxCocoa */; };
 		88B8EF952C64E0D9007E0864 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 88B8EF942C64E0D9007E0864 /* RxSwift */; };
 		88B8EF982C64E0E1007E0864 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 88B8EF972C64E0E1007E0864 /* SnapKit */; };
+		88DB25932C66F518009CA375 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DB25922C66F518009CA375 /* UserDefaultsManager.swift */; };
+		88DB25952C66F889009CA375 /* RecentSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DB25942C66F889009CA375 /* RecentSearchCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		88B8EF852C64DD72007E0864 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		88B8EF8B2C64DDB6007E0864 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		88B8EF8F2C64DF42007E0864 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
+		88DB25922C66F518009CA375 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		88DB25942C66F889009CA375 /* RecentSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +104,7 @@
 			children = (
 				886F96C42C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift */,
 				886F96DE2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift */,
+				88DB25942C66F889009CA375 /* RecentSearchCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 		88B8EF762C64DD71007E0864 /* Itunes */ = {
 			isa = PBXGroup;
 			children = (
+				88DB25912C66F4F9009CA375 /* UserDefaults */,
 				883C30D22C66557900AB2A77 /* Extension */,
 				886F96DB2C65E68C00D8CDF3 /* Protocol */,
 				886F96D02C65D95400D8CDF3 /* Search */,
@@ -170,6 +176,14 @@
 				88B8EF852C64DD72007E0864 /* Info.plist */,
 			);
 			path = Itunes;
+			sourceTree = "<group>";
+		};
+		88DB25912C66F4F9009CA375 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				88DB25922C66F518009CA375 /* UserDefaultsManager.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,7 +279,9 @@
 				886F96D42C65E64F00D8CDF3 /* SearchDetailViewController.swift in Sources */,
 				886F96D22C65D97100D8CDF3 /* SearchViewModel.swift in Sources */,
 				886F96DF2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift in Sources */,
+				88DB25932C66F518009CA375 /* UserDefaultsManager.swift in Sources */,
 				883C30D12C66557000AB2A77 /* UIButton.Configuration+.swift in Sources */,
+				88DB25952C66F889009CA375 /* RecentSearchCollectionViewCell.swift in Sources */,
 				88B8EF7A2C64DD71007E0864 /* SceneDelegate.swift in Sources */,
 				886F96C72C65CAB700D8CDF3 /* Itunes.swift in Sources */,
 			);

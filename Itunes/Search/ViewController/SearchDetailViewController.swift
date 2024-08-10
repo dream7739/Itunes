@@ -163,12 +163,14 @@ final class SearchDetailViewController: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.detailItunesData
+            .compactMap { $0 }
             .bind(with: self) { owner, value in
                 owner.configureData(value)
             }
             .disposed(by: disposeBag)
         
         output.detailItunesData
+            .compactMap{ $0 }
             .map { $0.screenshotUrls }
             .bind(to: collectionView.rx.items(cellIdentifier: PreviewCollectionViewCell.identifier, cellType: PreviewCollectionViewCell.self)){
             (row, element, cell) in

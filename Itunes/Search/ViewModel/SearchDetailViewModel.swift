@@ -16,18 +16,13 @@ final class SearchDetailViewModel: BaseViewModel {
     }
     
     struct Output {
-        let detailItunesData: BehaviorRelay<Itunes>
-
+        let detailItunesData: BehaviorRelay<Itunes?>
     }
     
     func transform(input: Input) -> Output {
-        let detailItuunesData = BehaviorRelay<Itunes>(value: detailData!)
+        let detailItunesData = BehaviorRelay(value: detailData)
         
-        if let detailData = detailData {
-            detailItuunesData.accept(detailData)
-        }
-        
-        return Output(detailItunesData: detailItuunesData)
+        return Output(detailItunesData: detailItunesData)
         
     }
     
