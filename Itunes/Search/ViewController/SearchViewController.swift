@@ -53,7 +53,6 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         configureDataSource()
-        applyInitialSnapshot()
         bind()
     }
     
@@ -65,6 +64,12 @@ final class SearchViewController: UIViewController {
         
         let output = viewModel.transform(input: input)
         
+        output.searchList
+            .subscribe(with: self) { owner, value in
+                owner.applyInitialSnapshot(data: value.sorted { $0.value > $1.value }.map { $0.key } )
+            }
+            .disposed(by: disposeBag)
+
         output.resultList
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
@@ -121,10 +126,10 @@ final class SearchViewController: UIViewController {
         
     }
     
-    private func applyInitialSnapshot(){
+    private func applyInitialSnapshot(data: [String]){
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.keyword, .main])
-        snapshot.appendItems(["안녕", "하세", "요"], toSection: .keyword)
+        snapshot.appendSections(Section.allCases)
+        snapshot.appendItems(data, toSection: .keyword)
         dataSource.apply(snapshot)
         
     }

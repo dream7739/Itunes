@@ -27,5 +27,5 @@ final class UserDefaultsManager {
     private init() { }
     
     @UserDefault(key: "searchList", defaultValue: [:])
-    static var searchList: [Int: String]
+    static var searchList: [String: Date]
 }

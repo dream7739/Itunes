@@ -19,11 +19,13 @@ final class SearchViewModel: BaseViewModel {
     }
     
     struct Output {
+        let searchList: BehaviorSubject<[String: Date]>
         let resultList: PublishSubject<[Itunes]>
     }
     
     
     func transform(input: Input) -> Output {
+        let searchList = BehaviorSubject(value: UserDefaultsManager.searchList)
         let resultList = PublishSubject<[Itunes]>()
         
         input.searchButtonTap
@@ -31,6 +33,11 @@ final class SearchViewModel: BaseViewModel {
             .withLatestFrom(input.searchText)
             .distinctUntilChanged()
             .map { $0.trimmingCharacters(in: .whitespaces) }
+            .map { value in
+                UserDefaultsManager.searchList[value] = Date()
+                searchList.onNext(UserDefaultsManager.searchList)
+                return value
+            }
             .map { $0.replacingOccurrences(of: " ", with: "+") }
             .flatMap {
                 NetworkManager.shared.callRequest(term: $0)
@@ -47,6 +54,9 @@ final class SearchViewModel: BaseViewModel {
             .disposed(by: disposeBag)
 
         
-        return Output(resultList: resultList)
+        return Output(
+            searchList: searchList,
+            resultList: resultList
+        )
     }
 }
