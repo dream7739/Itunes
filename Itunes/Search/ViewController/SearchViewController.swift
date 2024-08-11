@@ -8,14 +8,14 @@
 import UIKit
 import SnapKit
 import RxSwift
+import RxCocoa
+import RxDataSources
 
 final class SearchViewController: UIViewController {
     
     private let searchController = UISearchController()
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
-    
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     
     private func layout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { section, env in
@@ -33,7 +33,6 @@ final class SearchViewController: UIViewController {
             case .main:
                 let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
-                
                 let containerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(350))
                 let containerGroup = NSCollectionLayoutGroup.vertical(layoutSize: containerSize, subitems: [infoItem])
                 
@@ -52,11 +51,10 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        configureDataSource()
         bind()
     }
     
-    private func bind(){
+    private func bind() {
         let input = SearchViewModel.Input(
             searchText: searchController.searchBar.rx.text.orEmpty,
             searchButtonTap: searchController.searchBar.rx.searchButtonClicked
@@ -64,25 +62,21 @@ final class SearchViewController: UIViewController {
         
         let output = viewModel.transform(input: input)
         
-        output.searchList
-            .subscribe(with: self) { owner, value in
-                owner.applyInitialSnapshot(data: value.sorted { $0.value > $1.value }.map { $0.key } )
-            }
-            .disposed(by: disposeBag)
-
-        output.resultList
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, value in
-                owner.updateSnapshot(data: value)
-            } onError: { owner, error in
-                print("error \(error)")
-            } onCompleted: { owner in
-                print("complete")
-            } onDisposed: { owner in
-                print("disposed")
-            }
+        let dataSource = configureDataSource()
+        
+        output.sections
+            .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
+        collectionView.rx.itemSelected
+            .bind(with: self) { owner, value in
+                guard let section = Section(rawValue: value.section), section == .main else { return }
+                let detailVC = SearchDetailViewController()
+                let data = owner.viewModel.response.results[value.item]
+                detailVC.viewModel.detailData = data
+                owner.navigationController?.pushViewController(detailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
         
     }
     
@@ -99,68 +93,64 @@ final class SearchViewController: UIViewController {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
-        collectionView.delegate = self
+        collectionView.register(RecentSearchCollectionViewCell.self, forCellWithReuseIdentifier: RecentSearchCollectionViewCell.identifier)
+        collectionView.register(SearchResultCollectionViewCell.self, forCellWithReuseIdentifier: SearchResultCollectionViewCell.identifier)
     }
     
-    private func configureDataSource(){
-        let keywordRegisteration = UICollectionView.CellRegistration<RecentSearchCollectionViewCell, String> { cell, indexPath, itemIdentifier in
-            cell.configureData(data: itemIdentifier)
-        }
-        
-        let mainRegisteration = UICollectionView.CellRegistration<ItunesCollectionViewCell, Itunes> { cell, indexPath, itemIdentifier in
-            cell.configureData(data: itemIdentifier)
-        }
-        
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-            switch Section.allCases[indexPath.section] {
-            case .keyword:
-                guard let item = itemIdentifier as? String else { return UICollectionViewCell() }
-                let cell = collectionView.dequeueConfiguredReusableCell(using: keywordRegisteration, for: indexPath, item: item)
+    private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<MultipleSectionModel> {
+        return RxCollectionViewSectionedReloadDataSource { dataSource, collectionView, indexPath, item in
+            switch dataSource[indexPath]{
+            case .keywords(let keyword):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCollectionViewCell.identifier, for: indexPath) as? RecentSearchCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureData(data: keyword)
                 return cell
-            case .main:
-                guard let item = itemIdentifier as? Itunes else { return UICollectionViewCell() }
-                let cell = collectionView.dequeueConfiguredReusableCell(using: mainRegisteration, for: indexPath, item: item)
+            case .results(let result):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCollectionViewCell.identifier, for: indexPath) as? SearchResultCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureData(data: result)
                 return cell
             }
-        })
+        }
         
     }
     
-    private func applyInitialSnapshot(data: [String]){
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections(Section.allCases)
-        snapshot.appendItems(data, toSection: .keyword)
-        dataSource.apply(snapshot)
-        
-    }
     
-    private func updateSnapshot(data: [Itunes]){
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .main))
-        snapshot.appendItems(data, toSection: .main)
-        dataSource.apply(snapshot)
-    }
 }
 
 extension SearchViewController {
-    enum Section: CaseIterable {
-        case keyword
-        case main
+    enum Section: Int, CaseIterable {
+        case keyword = 0
+        case main = 1
     }
-    
-    typealias Item = AnyHashable
 }
 
-extension SearchViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let section = dataSource.sectionIdentifier(for: indexPath.section)
-        
-        if section == .main {
-            if let data = dataSource.itemIdentifier(for: indexPath) as? Itunes {
-                let detailVC = SearchDetailViewController()
-                detailVC.viewModel.detailData = data
-                navigationController?.pushViewController(detailVC, animated: true)
-            }
+enum MultipleSectionModel: SectionModelType {
+    typealias Item = SectionItem
+    
+    case searchKeywordSection(items: [SectionItem])
+    case searchResultSection(items: [SectionItem])
+    
+    var items: [SectionItem] {
+        switch self {
+        case .searchKeywordSection(let items):
+            return items
+        case .searchResultSection(let items):
+            return items
+        }
+    }
+    
+    init(original: MultipleSectionModel, items: [SectionItem]) {
+        switch original {
+        case .searchKeywordSection(let items):
+            self = .searchKeywordSection(items: items)
+        case .searchResultSection(let items):
+            self = .searchResultSection(items: items)
         }
     }
 }
+
+enum SectionItem {
+    case keywords(keyword: String)
+    case results(result: Itunes)
+    
+}
+

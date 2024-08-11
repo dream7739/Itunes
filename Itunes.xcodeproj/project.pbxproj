@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		883C30D12C66557000AB2A77 /* UIButton.Configuration+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883C30D02C66557000AB2A77 /* UIButton.Configuration+.swift */; };
-		886F96C52C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96C42C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift */; };
+		886F96C52C65C3FB00D8CDF3 /* SearchResultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96C42C65C3FB00D8CDF3 /* SearchResultCollectionViewCell.swift */; };
 		886F96C72C65CAB700D8CDF3 /* Itunes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96C62C65CAB700D8CDF3 /* Itunes.swift */; };
 		886F96C92C65CD4300D8CDF3 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96C82C65CD4300D8CDF3 /* NetworkManager.swift */; };
 		886F96CC2C65CF7A00D8CDF3 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96CB2C65CF7A00D8CDF3 /* NetworkError.swift */; };
@@ -18,6 +18,7 @@
 		886F96D62C65E65500D8CDF3 /* SearchDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96D52C65E65500D8CDF3 /* SearchDetailViewModel.swift */; };
 		886F96DD2C65E69E00D8CDF3 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96DC2C65E69E00D8CDF3 /* BaseViewModel.swift */; };
 		886F96DF2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F96DE2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift */; };
+		887436262C689938003CDB1A /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 887436252C689938003CDB1A /* RxDataSources */; };
 		88B8EF782C64DD71007E0864 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B8EF772C64DD71007E0864 /* AppDelegate.swift */; };
 		88B8EF7A2C64DD71007E0864 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B8EF792C64DD71007E0864 /* SceneDelegate.swift */; };
 		88B8EF7C2C64DD71007E0864 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B8EF7B2C64DD71007E0864 /* SearchViewController.swift */; };
@@ -35,7 +36,7 @@
 
 /* Begin PBXFileReference section */
 		883C30D02C66557000AB2A77 /* UIButton.Configuration+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton.Configuration+.swift"; sourceTree = "<group>"; };
-		886F96C42C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesCollectionViewCell.swift; sourceTree = "<group>"; };
+		886F96C42C65C3FB00D8CDF3 /* SearchResultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCollectionViewCell.swift; sourceTree = "<group>"; };
 		886F96C62C65CAB700D8CDF3 /* Itunes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Itunes.swift; sourceTree = "<group>"; };
 		886F96C82C65CD4300D8CDF3 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		886F96CB2C65CF7A00D8CDF3 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
@@ -66,6 +67,7 @@
 				886F96CF2C65D94A00D8CDF3 /* Kingfisher in Frameworks */,
 				88B8EF982C64E0E1007E0864 /* SnapKit in Frameworks */,
 				88B8EF952C64E0D9007E0864 /* RxSwift in Frameworks */,
+				887436262C689938003CDB1A /* RxDataSources in Frameworks */,
 				88B8EF932C64E0D9007E0864 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,7 +106,7 @@
 		886F96D72C65E65B00D8CDF3 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				886F96C42C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift */,
+				886F96C42C65C3FB00D8CDF3 /* SearchResultCollectionViewCell.swift */,
 				886F96DE2C65FD8400D8CDF3 /* PreviewCollectionViewCell.swift */,
 				88DB25942C66F889009CA375 /* RecentSearchCollectionViewCell.swift */,
 			);
@@ -210,6 +212,7 @@
 				88B8EF942C64E0D9007E0864 /* RxSwift */,
 				88B8EF972C64E0E1007E0864 /* SnapKit */,
 				886F96CE2C65D94A00D8CDF3 /* Kingfisher */,
+				887436252C689938003CDB1A /* RxDataSources */,
 			);
 			productName = Itunes;
 			productReference = 88B8EF742C64DD71007E0864 /* Itunes.app */;
@@ -243,6 +246,7 @@
 				88B8EF912C64E0D9007E0864 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				88B8EF962C64E0E1007E0864 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				886F96CD2C65D94A00D8CDF3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				887436242C689938003CDB1A /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = 88B8EF752C64DD71007E0864 /* Products */;
 			projectDirPath = "";
@@ -271,7 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				886F96C52C65C3FB00D8CDF3 /* ItunesCollectionViewCell.swift in Sources */,
+				886F96C52C65C3FB00D8CDF3 /* SearchResultCollectionViewCell.swift in Sources */,
 				886F96D62C65E65500D8CDF3 /* SearchDetailViewModel.swift in Sources */,
 				886F96DD2C65E69E00D8CDF3 /* BaseViewModel.swift in Sources */,
 				886F96CC2C65CF7A00D8CDF3 /* NetworkError.swift in Sources */,
@@ -518,6 +522,14 @@
 				minimumVersion = 7.12.0;
 			};
 		};
+		887436242C689938003CDB1A /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		88B8EF912C64E0D9007E0864 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -541,6 +553,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 886F96CD2C65D94A00D8CDF3 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		887436252C689938003CDB1A /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 887436242C689938003CDB1A /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 		88B8EF922C64E0D9007E0864 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;

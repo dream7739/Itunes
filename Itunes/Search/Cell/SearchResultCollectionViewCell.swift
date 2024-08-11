@@ -1,5 +1,5 @@
 //
-//  ItunesCollectionViewCell.swift
+//  SearchResultCollectionViewCell.swift
 //  Itunes
 //
 //  Created by 홍정민 on 8/9/24.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class ItunesCollectionViewCell: UICollectionViewCell {
+final class SearchResultCollectionViewCell: UICollectionViewCell {
     
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()

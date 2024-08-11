@@ -40,6 +40,7 @@ final class NetworkManager {
                 
                 if let data = data, let decodedData = try? JSONDecoder().decode(ItunesResponse.self, from: data) {
                     observer.onNext(decodedData)
+                    observer.onCompleted()
                 }else {
                     observer.onError(NetworkError.noData)
                 }

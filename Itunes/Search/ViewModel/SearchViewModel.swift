@@ -12,6 +12,7 @@ import RxCocoa
 final class SearchViewModel: BaseViewModel {
     
     private let disposeBag = DisposeBag()
+    var response = ItunesResponse(resultCount: 0, results: [])
     
     struct Input {
         let searchText: ControlProperty<String>
@@ -19,14 +20,14 @@ final class SearchViewModel: BaseViewModel {
     }
     
     struct Output {
-        let searchList: BehaviorSubject<[String: Date]>
-        let resultList: PublishSubject<[Itunes]>
+        let sections: BehaviorRelay<[MultipleSectionModel]>
     }
     
     
     func transform(input: Input) -> Output {
-        let searchList = BehaviorSubject(value: UserDefaultsManager.searchList)
+        let searchList = BehaviorRelay(value: UserDefaultsManager.searchList)
         let resultList = PublishSubject<[Itunes]>()
+        let sections = BehaviorRelay(value: createInitialSection())
         
         input.searchButtonTap
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
@@ -35,7 +36,6 @@ final class SearchViewModel: BaseViewModel {
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .map { value in
                 UserDefaultsManager.searchList[value] = Date()
-                searchList.onNext(UserDefaultsManager.searchList)
                 return value
             }
             .map { $0.replacingOccurrences(of: " ", with: "+") }
@@ -43,7 +43,8 @@ final class SearchViewModel: BaseViewModel {
                 NetworkManager.shared.callRequest(term: $0)
             }
             .subscribe(with: self) { owner, response in
-                resultList.onNext(response.results)
+                owner.response = response
+                resultList.onNext(owner.response.results)
             } onError: { owner, error in
                 print("error, \(error)")
             } onCompleted: { owner in
@@ -52,11 +53,44 @@ final class SearchViewModel: BaseViewModel {
                 print("disposed")
             }
             .disposed(by: disposeBag)
-
+        
+        resultList
+            .bind(with: self) { owner, value in
+                let section = owner.updateSectionData(value)
+                sections.accept(section)
+            }
+            .disposed(by: disposeBag)
         
         return Output(
-            searchList: searchList,
-            resultList: resultList
+            sections: sections
         )
+    }
+    
+    private func createInitialSection() -> [MultipleSectionModel] {
+        let initialItem = UserDefaultsManager.searchList
+            .map { $0.key }
+            .map { SectionItem.keywords(keyword: $0) }
+        
+        let initialSection = [
+            MultipleSectionModel.searchKeywordSection(items: initialItem)
+        ]
+        
+        return initialSection
+        
+    }
+    
+    private func updateSectionData(_ data: [Itunes]) -> [MultipleSectionModel] {
+        let keywordItem = UserDefaultsManager.searchList
+            .map { $0.key }
+            .map { SectionItem.keywords(keyword: $0) }
+        
+        let resultItem = data.map { SectionItem.results(result: $0) }
+        
+        let section = [
+            MultipleSectionModel.searchKeywordSection(items: keywordItem),
+            MultipleSectionModel.searchResultSection(items: resultItem)
+        ]
+        
+        return section
     }
 }
