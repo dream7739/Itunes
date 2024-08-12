@@ -170,8 +170,7 @@ final class SearchDetailViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.detailItunesData
-            .compactMap{ $0 }
-            .map { $0.screenshotUrls }
+            .compactMap{ $0?.screenshotUrls }
             .bind(to: collectionView.rx.items(cellIdentifier: PreviewCollectionViewCell.identifier, cellType: PreviewCollectionViewCell.self)){
             (row, element, cell) in
                 cell.configureData(data: element)

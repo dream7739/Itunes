@@ -8,13 +8,12 @@
 import Foundation
 import RxSwift
 
-
 final class NetworkManager {
     private init(){ }
     static let shared = NetworkManager()
     
-    func callRequest(term: String) -> Observable<ItunesResponse> {
-        let result = Observable<ItunesResponse>.create { observer in
+    func callRequest(term: String) -> Single<ItunesResponse> {
+        let result = Single<ItunesResponse>.create { observer in
             let term = URLQueryItem(name: "term", value: term)
             let country = URLQueryItem(name: "country", value: "KR")
             let media = URLQueryItem(name: "media", value: "software")
@@ -23,26 +22,25 @@ final class NetworkManager {
             component?.queryItems = [term, country, media]
             
             guard let url = component?.url else {
-                observer.onError(NetworkError.invalidURL)
+                observer(.failure(NetworkError.invalidURL))
                 return Disposables.create()
             }
             
             URLSession.shared.dataTask(with: url) { data, response, error in
                 if let _ = error {
-                    observer.onError(NetworkError.unknownError)
+                    observer(.failure(NetworkError.unknownError))
                     return
                 }
                 
                 guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else{
-                    observer.onError(NetworkError.invalidStatus)
+                    observer(.failure(NetworkError.invalidStatus))
                     return
                 }
                 
                 if let data = data, let decodedData = try? JSONDecoder().decode(ItunesResponse.self, from: data) {
-                    observer.onNext(decodedData)
-                    observer.onCompleted()
+                    observer(.success(decodedData))
                 }else {
-                    observer.onError(NetworkError.noData)
+                    observer(.failure(NetworkError.noData))
                 }
                 
             }.resume()

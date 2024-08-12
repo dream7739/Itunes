@@ -23,10 +23,8 @@ final class SearchViewModel: BaseViewModel {
         let sections: BehaviorRelay<[MultipleSectionModel]>
     }
     
-    
     func transform(input: Input) -> Output {
-        let searchList = BehaviorRelay(value: UserDefaultsManager.searchList)
-        let resultList = PublishSubject<[Itunes]>()
+        let resultList = PublishRelay<[Itunes]>()
         let sections = BehaviorRelay(value: createInitialSection())
         
         input.searchButtonTap
@@ -41,10 +39,13 @@ final class SearchViewModel: BaseViewModel {
             .map { $0.replacingOccurrences(of: " ", with: "+") }
             .flatMap {
                 NetworkManager.shared.callRequest(term: $0)
+                    .catch { error in
+                        return Single<ItunesResponse>.never()
+                    }
             }
             .subscribe(with: self) { owner, response in
                 owner.response = response
-                resultList.onNext(owner.response.results)
+                resultList.accept(owner.response.results)
             } onError: { owner, error in
                 print("error, \(error)")
             } onCompleted: { owner in
