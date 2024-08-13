@@ -35,7 +35,6 @@ final class SearchViewController: UIViewController {
                 let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
                 let containerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(350))
                 let containerGroup = NSCollectionLayoutGroup.vertical(layoutSize: containerSize, subitems: [infoItem])
-                
                 let section = NSCollectionLayoutSection(group: containerGroup)
                 return section
             }

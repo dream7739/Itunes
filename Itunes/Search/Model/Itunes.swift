@@ -12,8 +12,7 @@ struct ItunesResponse: Decodable {
     let results: [Itunes]
 }
 
-struct Itunes: Decodable, Hashable, Identifiable {
-    var id = UUID()
+struct Itunes: Decodable {
     let screenshotUrls: [String]
     let artworkUrl60: String
     let artworkUrl100: String
@@ -33,24 +32,4 @@ struct Itunes: Decodable, Hashable, Identifiable {
     let contentAdvisoryRating: String
     let version: String
     
-    enum CodingKeys: CodingKey {
-        case screenshotUrls
-        case artworkUrl60
-        case artworkUrl100
-        case artworkUrl512
-        case currentVersionReleaseDate
-        case releaseNotes
-        case artistName
-        case genres
-        case price
-        case description
-        case sellerName
-        case primaryGenreName
-        case releaseDate
-        case trackName
-        case minimumOsVersion
-        case averageUserRating
-        case contentAdvisoryRating
-        case version
-    }
 }

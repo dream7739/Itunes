@@ -12,8 +12,8 @@ final class NetworkManager {
     private init(){ }
     static let shared = NetworkManager()
     
-    func callRequest(term: String) -> Single<ItunesResponse> {
-        let result = Single<ItunesResponse>.create { observer in
+    func callRequest(term: String) -> Single<Result<ItunesResponse, NetworkError>> {
+        let result = Single<Result<ItunesResponse, NetworkError>>.create { observer in
             let term = URLQueryItem(name: "term", value: term)
             let country = URLQueryItem(name: "country", value: "KR")
             let media = URLQueryItem(name: "media", value: "software")
@@ -22,13 +22,13 @@ final class NetworkManager {
             component?.queryItems = [term, country, media]
             
             guard let url = component?.url else {
-                observer(.failure(NetworkError.invalidURL))
+                observer(.success(.failure(NetworkError.invalidURL)))
                 return Disposables.create()
             }
             
             URLSession.shared.dataTask(with: url) { data, response, error in
                 if let _ = error {
-                    observer(.failure(NetworkError.unknownError))
+                    observer(.success(.failure(NetworkError.unknownError)))
                     return
                 }
                 
@@ -38,9 +38,9 @@ final class NetworkManager {
                 }
                 
                 if let data = data, let decodedData = try? JSONDecoder().decode(ItunesResponse.self, from: data) {
-                    observer(.success(decodedData))
+                    observer(.success(.success(decodedData)))
                 }else {
-                    observer(.failure(NetworkError.noData))
+                    observer(.success(.failure(NetworkError.noData)))
                 }
                 
             }.resume()

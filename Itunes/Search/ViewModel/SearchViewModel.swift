@@ -39,13 +39,15 @@ final class SearchViewModel: BaseViewModel {
             .map { $0.replacingOccurrences(of: " ", with: "+") }
             .flatMap {
                 NetworkManager.shared.callRequest(term: $0)
-                    .catch { error in
-                        return Single<ItunesResponse>.never()
-                    }
             }
             .subscribe(with: self) { owner, response in
-                owner.response = response
-                resultList.accept(owner.response.results)
+                switch response {
+                case .success(let value):
+                    owner.response = value
+                    resultList.accept(owner.response.results)
+                case .failure(let error):
+                    print(error)
+                }
             } onError: { owner, error in
                 print("error, \(error)")
             } onCompleted: { owner in
